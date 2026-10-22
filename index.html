@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5a8c8">
+<title>MyAI 💗</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff1f7;color:#49283a;font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#f8b9d4,#e783b0);padding:25px 20px;border-radius:0 0 28px 28px;color:white}
+h1{margin:0;font-size:30px}
+header p{margin-bottom:0}
+main{max-width:650px;margin:auto;padding:16px}
+nav{display:flex;gap:8px;margin-bottom:15px}
+button{border:0;border-radius:13px;padding:12px;background:#c94d83;color:white;font-weight:bold;cursor:pointer}
+nav button{flex:1;background:white;color:#a33e6b;border:1px solid #f1c8da}
+section{background:white;padding:18px;border-radius:20px;margin-bottom:14px;box-shadow:0 4px 18px #a84a7110}
+h2{font-size:19px;margin-top:0}
+textarea{width:100%;min-height:100px;border:1px solid #efcbdc;border-radius:12px;padding:12px;font:inherit}
+input{max-width:100%}
+img{max-width:100%;max-height:350px;object-fit:contain;border-radius:12px;margin-top:12px}
+.hidden{display:none}
+.note{font-size:12px;color:#936b80;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <h1>MyAI ♡</h1>
+  <p>La tua assistente personale 🌸</p>
+</header>
+<main>
+  <nav>
+    <button onclick="show('chat')">💬 Chat</button>
+    <button onclick="show('foto')">📸 Foto</button>
+  </nav>
+  <section id="chat">
+    <h2>Parliamone ✨</h2>
+    <p>Scrivi una richiesta da usare con il tuo assistente AI.</p>
+    <textarea id="richiesta" placeholder="Scrivi qui quello che desideri..."></textarea>
+    <p><button onclick="prepara()">Prepara richiesta</button>
+    <button onclick="copia()">Copia</button></p>
+    <p id="risposta">La tua richiesta apparirà qui 💗</p>
+    <p class="note">Questa versione non è ancora collegata a un modello AI.</p>
+  </section>
+  <section id="foto" class="hidden">
+    <h2>Il mio studio fotografico 💗</h2>
+    <p>Scegli una foto dal telefono.</p>
+    <input id="file" type="file" accept="image/*">
+    <p><label>Luminosità <input id="lum" type="range" min="60" max="150" value="100"></label></p>
+    <p><label>Contrasto <input id="con" type="range" min="60" max="150" value="100"></label></p>
+    <p><label>Bianco e nero <input id="bn" type="range" min="0" max="100" value="0"></label></p>
+    <img id="anteprima" class="hidden" alt="Anteprima foto">
+    <p><button onclick="salva()">Salva foto</button></p>
+    <p class="note">I filtri funzionano sul dispositivo. Le modifiche generative AI non sono ancora collegate.</p>
+  </section>
+</main>
+<script>
+function show(id){
+ document.getElementById('chat').classList.toggle('hidden',id!=='chat');
+ document.getElementById('foto').classList.toggle('hidden',id!=='foto');
+}
+function prepara(){
+ const t=document.getElementById('richiesta').value.trim();
+ document.getElementById('risposta').textContent=t||'Scrivi prima una richiesta 💗';
+}
+async function copia(){
+ const t=document.getElementById('richiesta').value;
+ try{await navigator.clipboard.writeText(t);alert('Richiesta copiata 💗')}
+ catch(e){alert('Seleziona il testo e copialo manualmente.')}
+}
+let foto=new Image(),pronta=false;
+const file=document.getElementById('file'),anteprima=document.getElementById('anteprima');
+file.onchange=()=>{
+ const f=file.files[0];if(!f)return;
+ foto.onload=()=>{pronta=true;anteprima.classList.remove('hidden');aggiorna()};
+ foto.src=URL.createObjectURL(f);
+};
+['lum','con','bn'].forEach(id=>document.getElementById(id).addEventListener('input',aggiorna));
+function aggiorna(){
+ if(!pronta)return;
+ anteprima.style.filter=`brightness(${lum.value}%) contrast(${con.value}%) grayscale(${bn.value}%)`;
+}
+function salva(){
+ if(!pronta){alert('Carica prima una foto 💗');return}
+ const c=document.createElement('canvas'),x=c.getContext('2d');
+ const s=Math.min(1,1800/Math.max(foto.naturalWidth,foto.naturalHeight));
+ c.width=foto.naturalWidth*s;c.height=foto.naturalHeight*s;
+ x.filter=`brightness(${lum.value}%) contrast(${con.value}%) grayscale(${bn.value}%)`;
+ x.drawImage(foto,0,0,c.width,c.height);
+ const a=document.createElement('a');a.href=c.toDataURL('image/jpeg',.92);a.download='myai-foto.jpg';a.click();
+}
+</script>
+</body>
+</html>
+
