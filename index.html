@@ -3,106 +3,148 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f5a8c8">
-  <link rel="manifest" href="./manifest.json">
-<link rel="icon" href="./icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffb6d9">
 <title>MyAI 💗</title>
+<link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#fff1f7;color:#49283a;font-family:Arial,sans-serif}
-header{background:linear-gradient(135deg,#f8b9d4,#e783b0);padding:25px 20px;border-radius:0 0 28px 28px;color:white}
-h1{margin:0;font-size:30px}
-header p{margin-bottom:0}
-main{max-width:650px;margin:auto;padding:16px}
-nav{display:flex;gap:8px;margin-bottom:15px}
-button{border:0;border-radius:13px;padding:12px;background:#c94d83;color:white;font-weight:bold;cursor:pointer}
-nav button{flex:1;background:white;color:#a33e6b;border:1px solid #f1c8da}
-section{background:white;padding:18px;border-radius:20px;margin-bottom:14px;box-shadow:0 4px 18px #a84a7110}
-h2{font-size:19px;margin-top:0}
-textarea{width:100%;min-height:100px;border:1px solid #efcbdc;border-radius:12px;padding:12px;font:inherit}
-input{max-width:100%}
-img{max-width:100%;max-height:350px;object-fit:contain;border-radius:12px;margin-top:12px}
-.hidden{display:none}
-.note{font-size:12px;color:#936b80;line-height:1.5}
+body{margin:0;padding:20px;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff0f7,#ffe0ef);color:#713b58}
+main{max-width:650px;margin:auto}
+h1{text-align:center;color:#e65b9c;font-size:34px}
+.sottotitolo{text-align:center;margin-bottom:24px}
+.card{background:#ffffffd9;padding:20px;border-radius:22px;margin:18px 0;box-shadow:0 5px 18px #e99abd30}
+h2{color:#df5c9c;margin-top:0}
+textarea{width:100%;min-height:110px;border:2px solid #f4b5d2;border-radius:14px;padding:12px;font:16px Arial;resize:vertical;background:#fffafd;color:#713b58}
+button{border:0;border-radius:14px;padding:12px 18px;margin-top:10px;background:#e968a6;color:white;font-size:15px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+.risposta{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff5fa;border-radius:14px;padding:14px;min-height:45px;line-height:1.5}
+.piccolo{font-size:12px;color:#956b82}
+label{display:block;margin:10px 0 5px}
+input[type=range]{width:100%;accent-color:#e968a6}
+img{display:block;max-width:100%;border-radius:16px;margin-top:14px}
+footer{text-align:center;font-size:12px;padding:15px;color:#a66e8a}
 </style>
 </head>
 <body>
-  
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js");
-  });
-}
-</script>
-
-<header>
-  <h1>MyAI ♡</h1>
-  <p>La tua assistente personale 🌸</p>
-</header>
 <main>
-  <nav>
-    <button onclick="show('chat')">💬 Chat</button>
-    <button onclick="show('foto')">📸 Foto</button>
-  </nav>
-  <section id="chat">
-    <h2>Parliamone ✨</h2>
-    <p>Scrivi una richiesta da usare con il tuo assistente AI.</p>
-    <textarea id="richiesta" placeholder="Scrivi qui quello che desideri..."></textarea>
-    <p><button onclick="prepara()">Prepara richiesta</button>
-    <button onclick="copia()">Copia</button></p>
-    <p id="risposta">La tua richiesta apparirà qui 💗</p>
-    <p class="note">Questa versione non è ancora collegata a un modello AI.</p>
-  </section>
-  <section id="foto" class="hidden">
-    <h2>Il mio studio fotografico 💗</h2>
-    <p>Scegli una foto dal telefono.</p>
-    <input id="file" type="file" accept="image/*">
-    <p><label>Luminosità <input id="lum" type="range" min="60" max="150" value="100"></label></p>
-    <p><label>Contrasto <input id="con" type="range" min="60" max="150" value="100"></label></p>
-    <p><label>Bianco e nero <input id="bn" type="range" min="0" max="100" value="0"></label></p>
-    <img id="anteprima" class="hidden" alt="Anteprima foto">
-    <p><button onclick="salva()">Salva foto</button></p>
-    <p class="note">I filtri funzionano sul dispositivo. Le modifiche generative AI non sono ancora collegate.</p>
-  </section>
+<h1>MyAI 💗</h1>
+<p class="sottotitolo">La tua intelligenza artificiale personale ✨</p>
+
+<section class="card">
+<h2>💬 Chatta con MyAI</h2>
+<textarea id="richiesta" placeholder="Scrivi qui quello che vuoi chiedermi..."></textarea>
+<button id="invia" onclick="prepara()">Invia messaggio 💗</button>
+<div id="risposta" class="risposta">Ciao! Sono MyAI 💗 Scrivimi qualcosa!</div>
+<p class="piccolo">MyAI può commettere errori: verifica le informazioni importanti.</p>
+</section>
+
+<section class="card">
+<h2>🎀 Modifica una foto</h2>
+<p>Seleziona una foto e prova i filtri rosa.</p>
+<input type="file" id="fileFoto" accept="image/*">
+<label for="lum">Luminosità</label>
+<input type="range" id="lum" min="50" max="150" value="100">
+<label for="rosa">Effetto rosa</label>
+<input type="range" id="rosa" min="0" max="100" value="0">
+<img id="anteprima" alt="Anteprima della foto" style="display:none">
+<button onclick="scaricaFoto()">Scarica foto 💗</button>
+</section>
+
+<footer>MyAI 💗 La tua piccola assistente personale</footer>
 </main>
+
 <script>
-function show(id){
- document.getElementById('chat').classList.toggle('hidden',id!=='chat');
- document.getElementById('foto').classList.toggle('hidden',id!=='foto');
+const API_URL = 'https://myai-motore.giulia-eleuteri05.workers.dev/';
+
+async function prepara(){
+  const campo = document.getElementById('richiesta');
+  const risposta = document.getElementById('risposta');
+  const pulsante = document.getElementById('invia');
+  const messaggio = campo.value.trim();
+
+  if(!messaggio){
+    risposta.textContent = 'Scrivi prima un messaggio 💗';
+    return;
+  }
+
+  pulsante.disabled = true;
+  risposta.textContent = 'MyAI sta pensando... 💗';
+
+  try{
+    const res = await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:messaggio})
+    });
+
+    const data = await res.json();
+
+    if(!res.ok || data.error){
+      throw new Error(data.error || 'Errore del server');
+    }
+
+    risposta.textContent = data.reply || 'Non ho ricevuto una risposta 💗';
+  }catch(error){
+    risposta.textContent = 'Ops! Non riesco a collegarmi a MyAI. Controlla la connessione e riprova. 💗';
+    console.error(error);
+  }finally{
+    pulsante.disabled = false;
+  }
 }
-function prepara(){
- const t=document.getElementById('richiesta').value.trim();
- document.getElementById('risposta').textContent=t||'Scrivi prima una richiesta 💗';
+
+const fileFoto = document.getElementById('fileFoto');
+const anteprima = document.getElementById('anteprima');
+let immagineOriginale = null;
+
+fileFoto.addEventListener('change',function(){
+  const file = this.files[0];
+  if(!file) return;
+
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+
+  img.onload = function(){
+    immagineOriginale = img;
+    anteprima.src = url;
+    anteprima.style.display = 'block';
+    aggiornaFiltri();
+  };
+
+  img.src = url;
+});
+
+function aggiornaFiltri(){
+  const luminosita = document.getElementById('lum').value;
+  const rosa = document.getElementById('rosa').value;
+  anteprima.style.filter = 'brightness('+luminosita+'%) sepia('+(rosa/2)+'%) saturate('+(100+rosa)+'%) hue-rotate('+(320+rosa/5)+'deg)';
 }
-async function copia(){
- const t=document.getElementById('richiesta').value;
- try{await navigator.clipboard.writeText(t);alert('Richiesta copiata 💗')}
- catch(e){alert('Seleziona il testo e copialo manualmente.')}
-}
-let foto=new Image(),pronta=false;
-const file=document.getElementById('file'),anteprima=document.getElementById('anteprima');
-file.onchange=()=>{
- const f=file.files[0];if(!f)return;
- foto.onload=()=>{pronta=true;anteprima.classList.remove('hidden');aggiorna()};
- foto.src=URL.createObjectURL(f);
-};
-['lum','con','bn'].forEach(id=>document.getElementById(id).addEventListener('input',aggiorna));
-function aggiorna(){
- if(!pronta)return;
- anteprima.style.filter=`brightness(${lum.value}%) contrast(${con.value}%) grayscale(${bn.value}%)`;
-}
-function salva(){
- if(!pronta){alert('Carica prima una foto 💗');return}
- const c=document.createElement('canvas'),x=c.getContext('2d');
- const s=Math.min(1,1800/Math.max(foto.naturalWidth,foto.naturalHeight));
- c.width=foto.naturalWidth*s;c.height=foto.naturalHeight*s;
- x.filter=`brightness(${lum.value}%) contrast(${con.value}%) grayscale(${bn.value}%)`;
- x.drawImage(foto,0,0,c.width,c.height);
- const a=document.createElement('a');a.href=c.toDataURL('image/jpeg',.92);a.download='myai-foto.jpg';a.click();
+
+document.getElementById('lum').addEventListener('input',aggiornaFiltri);
+document.getElementById('rosa').addEventListener('input',aggiornaFiltri);
+
+function scaricaFoto(){
+  if(!immagineOriginale){
+    alert('Seleziona prima una foto 💗');
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = immagineOriginale.naturalWidth;
+  canvas.height = immagineOriginale.naturalHeight;
+
+  const ctx = canvas.getContext('2d');
+  const luminosita = document.getElementById('lum').value;
+  const rosa = document.getElementById('rosa').value;
+
+  ctx.filter = 'brightness('+luminosita+'%) sepia('+(rosa/2)+'%) saturate('+(100+rosa)+'%) hue-rotate('+(320+rosa/5)+'deg)';
+  ctx.drawImage(immagineOriginale,0,0);
+
+  const link = document.createElement('a');
+  link.download = 'MyAI-foto.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 }
 </script>
 </body>
 </html>
-
