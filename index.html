@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,46 +8,85 @@
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:20px;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff0f7,#ffe0ef);color:#713b58}
-main{max-width:650px;margin:auto}
-h1{text-align:center;color:#e65b9c;font-size:34px}
-.sottotitolo{text-align:center;margin-bottom:24px}
-.card{background:#ffffffd9;padding:20px;border-radius:22px;margin:18px 0;box-shadow:0 5px 18px #e99abd30}
+:root{--pink:#e968a6;--deep:#713b58;--pale:#fff0f7;--line:#f4b5d2}
+body{margin:0;padding:18px;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff0f7,#ffe0ef);color:var(--deep)}
+main{max-width:700px;margin:auto}
+h1{text-align:center;color:#e65b9c;font-size:34px;margin:12px 0 5px}
+.sottotitolo{text-align:center;margin:0 0 20px}
+.menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:18px 0}
+.menu button{margin:0;padding:12px 5px;background:#fff;color:#bd4c83;border:2px solid #f4b5d2;font-size:13px}
+.menu button.attivo{background:var(--pink);color:#fff;border-color:var(--pink)}
+.card{background:#ffffffdf;padding:18px;border-radius:22px;margin:16px 0;box-shadow:0 5px 18px #e99abd30}
 h2{color:#df5c9c;margin-top:0}
-textarea{width:100%;min-height:110px;border:2px solid #f4b5d2;border-radius:14px;padding:12px;font:16px Arial;resize:vertical;background:#fffafd;color:#713b58}
-button{border:0;border-radius:14px;padding:12px 18px;margin-top:10px;background:#e968a6;color:white;font-size:15px;font-weight:bold;cursor:pointer}
+.descrizione{line-height:1.5}
+textarea{width:100%;min-height:110px;border:2px solid var(--line);border-radius:14px;padding:12px;font:16px Arial;resize:vertical;background:#fffafd;color:var(--deep)}
+button{border:0;border-radius:14px;padding:12px 18px;margin-top:10px;background:var(--pink);color:white;font-size:15px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6}
-.risposta{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff5fa;border-radius:14px;padding:14px;min-height:45px;line-height:1.5}
-.piccolo{font-size:12px;color:#956b82}
-label{display:block;margin:10px 0 5px}
-input[type=range]{width:100%;accent-color:#e968a6}
+.risposta{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff5fa;border-radius:14px;padding:14px;min-height:45px;line-height:1.55;margin-top:12px}
+.piccolo{font-size:12px;color:#956b82;line-height:1.5}
+label{display:block;margin:12px 0 5px}
+input[type=range]{width:100%;accent-color:var(--pink)}
+input[type=file]{max-width:100%;margin:10px 0}
 img{display:block;max-width:100%;border-radius:16px;margin-top:14px}
+.primario{width:100%}
+.nascosto{display:none!important}
 footer{text-align:center;font-size:12px;padding:15px;color:#a66e8a}
+@media(max-width:430px){body{padding:12px}.menu{grid-template-columns:repeat(2,minmax(0,1fr))}.menu button{font-size:14px}.card{padding:15px}}
 </style>
 </head>
 <body>
 <main>
+<header>
 <h1>MyAI 💗</h1>
 <p class="sottotitolo">La tua intelligenza artificiale personale ✨</p>
+</header>
 
-<section class="card">
+<nav class="menu" aria-label="Sezioni MyAI">
+<button class="attivo" data-sezione="chat" onclick="apriSezione('chat')">💬 Chat</button>
+<button data-sezione="study" onclick="apriSezione('study')">🎀 Study</button>
+<button data-sezione="care" onclick="apriSezione('care')">🌷 Care</button>
+<button data-sezione="studio" onclick="apriSezione('studio')">📸 Studio</button>
+</nav>
+
+<section id="sezione-chat" class="card">
 <h2>💬 Chatta con MyAI</h2>
-<textarea id="richiesta" placeholder="Scrivi qui quello che vuoi chiedermi..."></textarea>
-<button id="invia" onclick="prepara()">Invia messaggio 💗</button>
-<div id="risposta" class="risposta">Ciao! Sono MyAI 💗 Scrivimi qualcosa!</div>
+<p class="descrizione">Chiedimi quello che vuoi, in italiano o in inglese.</p>
+<textarea id="richiesta-chat" placeholder="Scrivi qui il tuo messaggio..."></textarea>
+<button class="primario" id="invia-chat" onclick="prepara('chat')">Invia messaggio 💗</button>
+<div id="risposta-chat" class="risposta" aria-live="polite">Ciao! Sono MyAI 💗 Scrivimi qualcosa!</div>
 <p class="piccolo">MyAI può commettere errori: verifica le informazioni importanti.</p>
 </section>
 
-<section class="card">
-<h2>🎀 Modifica una foto</h2>
-<p>Seleziona una foto e prova i filtri rosa.</p>
+<section id="sezione-study" class="card nascosto">
+<h2>🎀 MyAI Study</h2>
+<p class="descrizione">Chiedi schemi ordinati, riassunti, spiegazioni semplici o aiuto con l'inglese.</p>
+<textarea id="richiesta-study" placeholder="Es. Fammi uno schema facile sul present simple..."></textarea>
+<button class="primario" id="invia-study" onclick="prepara('study')">Crea il mio schema 🎀</button>
+<div id="risposta-study" class="risposta" aria-live="polite">Qui appariranno i tuoi schemi e le spiegazioni 💗</div>
+<p class="piccolo">Suggerimento: scrivi l'argomento e il livello di difficoltà che preferisci.</p>
+</section>
+
+<section id="sezione-care" class="card nascosto">
+<h2>🌷 MyAI Care</h2>
+<p class="descrizione">Uno spazio gentile per mettere in ordine i pensieri, parlare di relazioni e riflettere su come ti senti.</p>
+<textarea id="richiesta-care" placeholder="Puoi raccontarmi cosa hai in mente..."></textarea>
+<button class="primario" id="invia-care" onclick="prepara('care')">Parliamone 🌷</button>
+<div id="risposta-care" class="risposta" aria-live="polite">Sono qui per ascoltarti senza giudicarti 💗</div>
+<p class="piccolo">MyAI offre supporto informativo e riflessivo, non è una psicologa e non sostituisce un professionista.</p>
+</section>
+
+<section id="sezione-studio" class="card nascosto">
+<h2>📸 MyAI Studio</h2>
+<p class="descrizione">Carica una foto e prova i filtri. Questa versione modifica luce e tonalità: non cambia ancora vestiti, pose o sfondi con l'AI.</p>
+<label for="fileFoto">Scegli una foto</label>
 <input type="file" id="fileFoto" accept="image/*">
 <label for="lum">Luminosità</label>
 <input type="range" id="lum" min="50" max="150" value="100">
 <label for="rosa">Effetto rosa</label>
 <input type="range" id="rosa" min="0" max="100" value="0">
 <img id="anteprima" alt="Anteprima della foto" style="display:none">
-<button onclick="scaricaFoto()">Scarica foto 💗</button>
+<button class="primario" onclick="scaricaFoto()">Scarica foto 💗</button>
+<div id="stato-foto" class="piccolo" aria-live="polite"></div>
 </section>
 
 <footer>MyAI 💗 La tua piccola assistente personale</footer>
@@ -57,69 +95,97 @@ footer{text-align:center;font-size:12px;padding:15px;color:#a66e8a}
 <script>
 const API_URL = 'https://myai-motore.giulia-eleuteri05.workers.dev/';
 
-async function prepara(){
-  const campo = document.getElementById('richiesta');
-  const risposta = document.getElementById('risposta');
-  const pulsante = document.getElementById('invia');
-  const messaggio = campo.value.trim();
+const istruzioni = {
+  chat: 'Sei MyAI, un’assistente amichevole e utile. Rispondi in italiano, salvo richiesta diversa. Sii chiara, naturale e onesta.',
+  study: 'Sei MyAI Study, un’assistente didattica paziente. Rispondi in italiano salvo richiesta diversa. Quando serve, crea schemi ben organizzati con titoli, punti elenco ed esempi semplici. Per l’inglese adatta la spiegazione al livello richiesto. Non inventare fatti; segnala le incertezze.',
+  care: 'Sei MyAI Care, un’assistente empatica che aiuta a riflettere su emozioni, relazioni e autostima. Ascolta senza giudicare, separa fatti e interpretazioni e fai domande gentili quando utili. Non dichiarare di essere una psicologa, non fare diagnosi e non incoraggiare dipendenza. Se emerge un rischio immediato per la sicurezza, invita a contattare una persona fidata o i servizi di emergenza.',
+  studio: 'Sei MyAI Studio. In questa versione l’app può applicare solo filtri fotografici locali. Spiega con chiarezza che non può ancora generare nuovi sfondi, pose o abiti e non fingere di aver modificato una foto con l’AI.'
+};
+
+function apriSezione(nome){
+  ['chat','study','care','studio'].forEach(sezione=>{
+    document.getElementById('sezione-'+sezione).classList.toggle('nascosto',sezione!==nome);
+    const pulsante=document.querySelector('[data-sezione="'+sezione+'"]');
+    pulsante.classList.toggle('attivo',sezione===nome);
+    pulsante.setAttribute('aria-pressed',sezione===nome?'true':'false');
+  });
+}
+
+async function prepara(modalita){
+  const campo=document.getElementById('richiesta-'+modalita);
+  const risposta=document.getElementById('risposta-'+modalita);
+  const pulsante=document.getElementById('invia-'+modalita);
+  const messaggio=campo.value.trim();
 
   if(!messaggio){
-    risposta.textContent = 'Scrivi prima un messaggio 💗';
+    risposta.textContent='Scrivi prima un messaggio 💗';
     return;
   }
 
-  pulsante.disabled = true;
-  risposta.textContent = 'MyAI sta pensando... 💗';
+  pulsante.disabled=true;
+  risposta.textContent='MyAI sta pensando... 💗';
 
   try{
-    const res = await fetch(API_URL,{
+    const res=await fetch(API_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:messaggio})
+      body:JSON.stringify({
+        message:istruzioni[modalita]+'\\n\\nRichiesta dell’utente: '+messaggio
+      })
     });
 
-    const data = await res.json();
-
+    const data=await res.json();
     if(!res.ok || data.error){
       throw new Error(data.error || 'Errore del server');
     }
-
-    risposta.textContent = data.reply || 'Non ho ricevuto una risposta 💗';
+    risposta.textContent=data.reply || 'Non ho ricevuto una risposta 💗';
   }catch(error){
-    risposta.textContent = 'Ops! Non riesco a collegarmi a MyAI. Controlla la connessione e riprova. 💗';
-    console.error(error);
+    risposta.textContent='Non riesco a collegarmi a MyAI in questo momento. Riprova tra poco 💗';
+    console.error('MyAI error:',error);
   }finally{
-    pulsante.disabled = false;
+    pulsante.disabled=false;
   }
 }
 
-const fileFoto = document.getElementById('fileFoto');
-const anteprima = document.getElementById('anteprima');
-let immagineOriginale = null;
+const fileFoto=document.getElementById('fileFoto');
+const anteprima=document.getElementById('anteprima');
+const statoFoto=document.getElementById('stato-foto');
+let immagineOriginale=null;
+let urlFotoPrecedente=null;
 
 fileFoto.addEventListener('change',function(){
-  const file = this.files[0];
-  if(!file) return;
-
-  const url = URL.createObjectURL(file);
-  const img = new Image();
-
-  img.onload = function(){
-    immagineOriginale = img;
-    anteprima.src = url;
-    anteprima.style.display = 'block';
+  const file=this.files[0];
+  if(!file)return;
+  if(!file.type.startsWith('image/')){
+    statoFoto.textContent='Scegli un file immagine valido.';
+    return;
+  }
+  if(urlFotoPrecedente)URL.revokeObjectURL(urlFotoPrecedente);
+  const url=URL.createObjectURL(file);
+  urlFotoPrecedente=url;
+  const img=new Image();
+  img.onload=function(){
+    immagineOriginale=img;
+    anteprima.src=url;
+    anteprima.style.display='block';
     aggiornaFiltri();
+    statoFoto.textContent='Foto caricata. Puoi regolare i filtri e scaricare il risultato.';
   };
-
-  img.src = url;
+  img.onerror=function(){
+    statoFoto.textContent='Non riesco ad aprire questa foto. Prova con un’altra immagine.';
+  };
+  img.src=url;
 });
 
-function aggiornaFiltri(){
-  const luminosita = document.getElementById('lum').value;
-  const rosa = document.getElementById('rosa').value;
-  anteprima.style.filter = 'brightness('+luminosita+'%) sepia('+(rosa/2)+'%) saturate('+(100+rosa)+'%) hue-rotate('+(320+rosa/5)+'deg)';
+function filtroCorrente(){
+  const luminosita=document.getElementById('lum').value;
+  const rosa=Number(document.getElementById('rosa').value);
+  return 'brightness('+luminosita+'%) sepia('+(rosa/2)+'%) saturate('+(100+rosa)+'%) hue-rotate('+(320+rosa/5)+'deg)';
 }
 
+function aggiornaFiltri(){
+  anteprima.style.filter=filtroCorrente();
+}
 document.getElementById('lum').addEventListener('input',aggiornaFiltri);
 document.getElementById('rosa').addEventListener('input',aggiornaFiltri);
 
@@ -128,21 +194,15 @@ function scaricaFoto(){
     alert('Seleziona prima una foto 💗');
     return;
   }
-
-  const canvas = document.createElement('canvas');
-  canvas.width = immagineOriginale.naturalWidth;
-  canvas.height = immagineOriginale.naturalHeight;
-
-  const ctx = canvas.getContext('2d');
-  const luminosita = document.getElementById('lum').value;
-  const rosa = document.getElementById('rosa').value;
-
-  ctx.filter = 'brightness('+luminosita+'%) sepia('+(rosa/2)+'%) saturate('+(100+rosa)+'%) hue-rotate('+(320+rosa/5)+'deg)';
+  const canvas=document.createElement('canvas');
+  canvas.width=immagineOriginale.naturalWidth;
+  canvas.height=immagineOriginale.naturalHeight;
+  const ctx=canvas.getContext('2d');
+  ctx.filter=filtroCorrente();
   ctx.drawImage(immagineOriginale,0,0);
-
-  const link = document.createElement('a');
-  link.download = 'MyAI-foto.png';
-  link.href = canvas.toDataURL('image/png');
+  const link=document.createElement('a');
+  link.download='MyAI-foto.png';
+  link.href=canvas.toDataURL('image/png');
   link.click();
 }
 </script>
